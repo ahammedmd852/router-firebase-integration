@@ -1,13 +1,30 @@
+import { getAuth } from 'firebase/auth';
 import React from 'react';
-import useFirebase from '../../hooks/useFirebase';
+import { useSignInWithGoogle } from 'react-firebase-hooks/auth';
+import { useLocation, useNavigate } from 'react-router-dom';
+import app from '../../firebase.init';
+
+const auth = getAuth(app);
 
 const Login = () => {
-    const { googleSignIn } = useFirebase();
+    const [signInWithGoogle] = useSignInWithGoogle(auth)
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    const from = location.state.from.pathname || '/';
+
+    const handleGoogleLogIn = () => {
+        signInWithGoogle()
+            .then(() => {
+                navigate(from, { replace: true })
+            })
+    }
+
     return (
         <div>
             <h2>Please! Log In</h2>
             <div style={{ margin: "15px" }}>
-                <button onClick={googleSignIn}>Google Sign In</button>
+                <button onClick={handleGoogleLogIn}>Google Sign In</button>
             </div>
             <form>
                 <input type="email" placeholder='Your Email' />
