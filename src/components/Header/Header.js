@@ -4,16 +4,17 @@ import { Link } from 'react-router-dom';
 import useFirebase from '../../hooks/useFirebase';
 
 const Header = () => {
-    const { user } = useFirebase();
+    const { user, handleSignOut } = useFirebase();
     return (
         <div className='header'>
             <nav>
                 <Link to="/">Home</Link>
                 <Link to="/register">Register</Link>
+                <span>{user?.displayName && user.displayName}</span>
                 {
-                    user.uid
+                    user?.uid
                         ?
-                        <button>Sign Out</button>
+                        <button onClick={handleSignOut}>Sign Out</button>
                         :
                         <Link to="/login">Log In</Link>
                 }
